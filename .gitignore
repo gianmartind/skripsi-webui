@@ -21,3 +21,11 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+/server/__pycache__
+/server/modules/__pycache__
+/server/routes/__pycache__
+/server/static/detection/*
+/server/static/modules/*
+/server/static/uploads/*
+/server/static/models/*
