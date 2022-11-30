@@ -283,13 +283,13 @@ class BSIS_Verify:
 
         return ordered_list
 
-    def find_best_subsequence_(self, D):
+    def find_best_subsequence(self, D):
         start_time = time.time()
-        best_subsequence = self.BPair(0, 0, 0, 0, None)
+        best_subsequence = BPair(0, 0, 0, 0, None)
         for i in range(1, len(D)):
             for j in range(0, len(D[i])):
                 # start_time2 = time.time()
-                dBestPrev = self.BPair(0, 0, 0, 0, None)
+                dBestPrev = BPair(0, 0, 0, 0, None)
                 for k in range(0, i):
                     for l in range(0, len(D[k])):
                         if D[k][l].order < D[i][j].order and D[k][l].bts > dBestPrev.bts:
@@ -301,10 +301,9 @@ class BSIS_Verify:
                 if D[i][j].bts + D[i][j].weight > best_subsequence.bts + best_subsequence.weight:
                     best_subsequence = D[i][j]
 
-        print('find_best_subsequence', time.time() - start_time)
         return best_subsequence
 
-    def find_best_subsequence(self, D):
+    def find_best_subsequence_(self, D):
         best_subsequence = BPair(0, 0, 0, 0, None)
         #dictionary menyimpan BPair dengan bts terbaik untuk tiap order
         best_per_order = dict()

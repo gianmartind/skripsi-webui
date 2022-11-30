@@ -34,7 +34,7 @@ def detect_image(model, consistency, uniqueness, img_dir):
 
     #Result
     res = list()
-    for k, v in sorted(bsis.result.items(), key=lambda i: i[1]['total_weight'], reverse=True)[:1]:
+    for k, v in sorted(bsis.result.items(), key=lambda i: i[1]['total_weight'], reverse=True)[:10]:
         train_img_class = k.split('_')[0]
         train_img_dir = f'./static/dataset/poi/{train_img_class}/{k}'
         train_img = util.get_image(train_img_dir, maxheight=600, maxwidth=600)

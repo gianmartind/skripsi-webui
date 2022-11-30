@@ -1,9 +1,10 @@
 import './App.css'
-import { useRef, useContext, useState } from 'react'
+import { useRef, useState } from 'react'
 
 import ModelPicker from './components/model_picker'
 import ImagePicker from './components/image_picker'
 import ImageDisplay from './components/image_display'
+import ResultList from './components/result_list'
 
 import url from './config/urls'
 
@@ -18,6 +19,13 @@ function App() {
   const [imageSrc, setImageSrc] = useState('./img_placeholder.png')
   const [imageName, setImageName] = useState('img_placeholder.png')
   const [totalWeight, setTotalWeight] = useState(0.0)
+
+
+  const data = {
+    img_name: 'img_placeholder.png',
+    total_weight: 0.0
+  }
+  const [resultList, setResultList] = useState([data])
 
   const changeUniqueness = (x) => {
     uniqueness.current = x
@@ -35,15 +43,6 @@ function App() {
     image_upload.current = x
   }
 
-  const _uploadImage = () => {
-    let formData = new FormData()
-    formData.append('file', image_upload.current)
-    axios.post(url.app.upload, formData)
-      .then((res) => {
-        console.log(res)
-      })
-  }
-
   const _detect = () => {
     if (model.current != null & image_upload.current != null) {
       let detect_param = {
@@ -56,17 +55,19 @@ function App() {
       formData.append('file', image_upload.current)
       axios.post(url.app.detect, formData)
         .then((res) => {
-          console.log(res.data)
-          let result = res.data[0]
-          setImageSrc(`${url.BASE_URL}/static/detection/${result[2]}`)
-          setImageName(result[0])
-          setTotalWeight(result[1])
+          setResultList(res.data)
         })
     } else {
       alert('Image not selected!')
     }
   }
 
+  const changeImageDisplay = (data) => {
+    setImageName(data[0])
+    setTotalWeight(data[1])
+    setImageSrc(`${url.BASE_URL}/static/detection/${data[2]}`)
+  }
+  
   return (
     <div className="row p-3">
       <div className="col-3">
@@ -84,6 +85,7 @@ function App() {
         <div className="row">
           <ImageDisplay image_name={imageName} image_src={imageSrc} total_weight={totalWeight} />
         </div>
+        <ResultList result_list={resultList} changeImageDisplay={changeImageDisplay}/>
       </div>
     </div>
   )
