@@ -16,6 +16,7 @@ const ResultList = ({ result_list, changeImageDisplay }) => {
     }, [result_list])
 
     const imageItems = useMemo(() => {
+        console.log(result_list)
         let items = []
         for(let i = 0; i < result_list.length; i++) {
             let data = {
@@ -28,7 +29,7 @@ const ResultList = ({ result_list, changeImageDisplay }) => {
     }, [selection, result_list])
 
     return (
-        <div style={{overflowX: 'scroll'}}>
+        <div>
             {imageItems}
         </div>
     )

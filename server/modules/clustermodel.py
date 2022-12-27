@@ -7,11 +7,12 @@ from enum import Enum
 
 class ClusterModel:    
     class Meta:
-        def __init__(self, n: int, desc_type, num_of_class, image_per_class):
+        def __init__(self, n: int, maxsize, desc_type, class_names, images_per_class):
             self.n = n
+            self.maxsize = maxsize
             self.desc_type = desc_type
-            self.num_of_class = num_of_class
-            self.image_per_class = image_per_class
+            self.class_names = class_names
+            self.images_per_class = images_per_class
 
     class Descriptor(Enum):
         ORB = 'ORB'
@@ -29,9 +30,10 @@ class ClusterModel:
     def __init__(self, **kwargs):
         self.meta = self.Meta(
             n=kwargs.get('n'),
+            maxsize=kwargs.get('maxsize'),
             desc_type=kwargs.get('desc_type'),
-            num_of_class=kwargs.get('num_of_class'),
-            image_per_class=kwargs.get('image_per_class')
+            class_names=kwargs.get('class_names'),
+            images_per_class=kwargs.get('images_per_class')
         )
     
     def set_data(self, **kwargs):
@@ -46,6 +48,10 @@ class ClusterModel:
         elif self.meta.desc_type == self.Descriptor.ORB:
             self.descriptors = dataset.iloc[:, :32].values
         
+        #get cluster labels
+        self.cluster_label = dataset.cluster_label.values
+        self.cluster2_label = dataset.cluster2_label.values
+
         #get keypoints array
         keypoint_columns = ['point_x', 'point_y', 'size', 'angle', 'response', 'octave', 'class_id']
         self.keypoints = dataset.loc[:, keypoint_columns].values
@@ -93,6 +99,17 @@ class ClusterModel:
         
         return np.array(local_features, dtype=self.LocalFeature)
     
+    def get_dataframe(self):
+        df = pd.DataFrame(self.descriptors)
+        df['img'] = self.img
+        df['img_class'] = self.img_class
+        df['cluster_label'] = self.cluster_label
+        df['cluster2_label'] = self.cluster2_label
+        df['uniqueness'] = self.uniqueness
+        df['consistency'] = self.consistency
+
+        return df
+
     def save(self, filename):
         with open(filename, 'wb') as file:
             pickle.dump(self.__dict__, file, 2)
@@ -101,7 +118,6 @@ class ClusterModel:
         with open(filename, 'rb') as file:
             class_dict = pickle.load(file)
             self.__dict__.update(class_dict)
-
 
     def get_keypoint(self, row):
         keypoint = cv2.KeyPoint(

@@ -3,7 +3,7 @@ const BASE_URL = 'http://localhost:1113'
 const APP = [
     'models',
     'upload',
-    'detect'
+    'identify'
 ]
 
 const app = (() => {

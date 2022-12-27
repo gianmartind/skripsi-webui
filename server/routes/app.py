@@ -2,7 +2,7 @@ from os import listdir
 from os.path import join
 from werkzeug.utils import secure_filename
 from flask import jsonify
-from routes.detect_image import detect_image
+from modules.detect_image import detect_image
 import json
 
 #--Methods--
@@ -17,7 +17,7 @@ def save_image(file):
     file.save(save_dir)
     return save_dir
 
-def detect():
+def identify():
     global _req
     global _app
     img_dir = save_image(_req.files['file'])
@@ -30,7 +30,7 @@ def detect():
 #--Routes--
 routes = {
     'models': listmodels,
-    'detect': detect
+    'identify': identify
 }
 
 #--app & request object--
