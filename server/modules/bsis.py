@@ -10,7 +10,6 @@ import time
 import os
 from glob import glob
 from . import util
-from scipy.spatial import KDTree
 from enum import Enum
 
 #%%

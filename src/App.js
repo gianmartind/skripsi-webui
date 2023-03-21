@@ -43,8 +43,8 @@ function App() {
   }
 
   const _identify = () => {
-    setLoading(true)
     if (model.current != null & image_upload.current != null) {
+      setLoading(true)
       let detect_param = {
         uniqueness: uniqueness.current,
         consistency: consistency.current,
@@ -55,9 +55,21 @@ function App() {
       formData.append('file', image_upload.current)
       axios.post(url.app.identify, formData)
         .then((res) => {
-          setResultList(res.data.list)
+          console.log(res.data.list)
+          if(res.data.list.length != 0){
+            setResultList(res.data.list)
+            setLoading(false)
+            setTotalTime(`${res.data.total_time}s`)
+          } else {
+            setResultList([data])
+            setLoading(false)
+            setTotalTime('No matches found!')
+          }
+        })
+        .catch((error) => {
+          setResultList([data])
           setLoading(false)
-          setTotalTime(`${res.data.total_time}s`)
+          setTotalTime('No matches found!')
         })
     } else {
       alert('Image not selected!')

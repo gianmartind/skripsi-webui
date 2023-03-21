@@ -1,0 +1,6 @@
+{
+    "models_dir" : "./static/models", 
+    "dataset_dir": "./static/dataset/gsv",
+    "detection_dir": "./static/detection",
+    "upload_dir": "./static/uploads"
+}

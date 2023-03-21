@@ -5,14 +5,18 @@ from flask import jsonify
 from modules.detect_image import detect_image
 import json
 
+with open('./static/paths.json') as p:
+    paths = json.load(p)
+
 #--Methods--
 def listmodels():
-    models_list = [m for m in listdir('./static/models')]
+    models_list = [m for m in listdir(paths['models_dir'])]
     response = jsonify(models_list)
     return response
 
 def save_image(file):
-    fname = file.filename
+    ext = file.filename.split('.')[-1]
+    fname = f'img_upload.{ext}'
     save_dir = join(_app.config['UPLOAD_FOLDER'], secure_filename(fname))
     file.save(save_dir)
     return save_dir

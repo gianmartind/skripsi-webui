@@ -16,7 +16,6 @@ const ResultList = ({ result_list, changeImageDisplay }) => {
     }, [result_list])
 
     const imageItems = useMemo(() => {
-        console.log(result_list)
         let items = []
         for(let i = 0; i < result_list.length; i++) {
             let data = {

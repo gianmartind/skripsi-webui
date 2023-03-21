@@ -16,12 +16,10 @@ from glob import glob
 #untuk pemrosesan data
 import numpy as np
 from sklearn.cluster import AgglomerativeClustering
-from scipy.spatial.distance import hamming
 from sklearn.metrics import pairwise_distances
 from sklearn.cluster import DBSCAN
 
 #lain-lain
-import time
 from itertools import combinations
 
 #%%
@@ -205,7 +203,7 @@ def hamming_int(point1, point2):
     return np.sum(np.apply_along_axis(hamming_dist, 0, arr))
 
 def hamming_bin(point1, point2):
-    return hamming(point1, point2) * len(point1)
+    return np.count_nonzero(point1 != point2)
 
 def hamming_bin_affinity(X):
     return pairwise_distances(X, metric=hamming_bin)
